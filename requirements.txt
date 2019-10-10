@@ -1,0 +1,6 @@
+black
+pytest
+rope
+flake8
+docopt
+steam==1.0.0a6
