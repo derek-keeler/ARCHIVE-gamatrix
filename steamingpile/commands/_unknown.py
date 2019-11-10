@@ -1,19 +1,18 @@
-from steamingpile.commands.steaming_pile_command import SteamingPileCommand
+from typing import List
+
+from . import _abc
+from steamingpile import interfaces
 
 
-class SPUnknownCommand(SteamingPileCommand):
-    def __init__(self, cfg):
+class Unknown(_abc.Command):
+    def __init__(self, cfg: interfaces.IConfiguration):
         super().__init__(cfg)
-
-    @property
-    def command_id(self) -> str:
-        return "unknown"
 
     @property
     def requires_client(self) -> bool:
         return False
 
-    def run(self, arguments: str) -> [str]:
+    def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> List[str]:
         """Tell the user the command they issued is unknown and tell them about help."""
 
         command = ""

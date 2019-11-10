@@ -36,7 +36,6 @@ Available Interactive Commands:
                             names separated by commas.
 
 Environment Variables:
-    
 """
 
 from __future__ import print_function

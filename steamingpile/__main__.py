@@ -8,7 +8,7 @@ Usage:
   steamingpile.py
   steamingpile.py (-h | --help)
   steamingpile.py --version
-  steamingpile.py [--user=<usr>] [--passwd=<pwd>] [--command=<cmd>] [--output-format=<fmt>] [--output-file=<file>]
+  steamingpile.py [--user=<usr>] [--passwd=<pwd>] [--command=<cmd>] [--output-format=<fmt>] [--output-file=<file>] [--user-steam-api-dev-key=<key>]
 
 Options:
   -h --help                         Show this screen.
@@ -45,11 +45,11 @@ Dotfiles:
   .user_steam_api_dev_key:  Contains a string value that is the steam API key for the user
                             running the application. Some of the internal calls made require a
                             Steam API key. Get one here https://steamcommunity.com/dev/apikey.
-"""
+"""  # noqa501
 
-import docopt
+import docopt                 # type: ignore
 
-from steamingpile.steaming_pile_config import SteamingPileConfig
+from . import steaming_pile_config
 from steamingpile.steaming_pile import SteamingPile
 
 STEAMINGPILE_VERSION = 0.1
@@ -57,6 +57,9 @@ STEAMINGPILE_VERSION = 0.1
 if __name__ == "__main__":
     opt = docopt.docopt(__doc__, version=STEAMINGPILE_VERSION)
 
-    config = SteamingPileConfig(opt)
+    config = steaming_pile_config.SteamingPileConfig(opt)
+    if config.api_key() == "":
+        raise RuntimeError("No personal API key found. Please see help (--help) for information.")
+
     sp = SteamingPile(config)
     sp.run()

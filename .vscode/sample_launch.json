@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Interactive",
+            "type": "python",
+            "request": "launch",
+            "module": "steamingpile",
+            "args": [
+                "--user=your_user_name_here"
+            ]
+        },
+        {
+            "name": "Friends",
+            "type": "python",
+            "request": "launch",
+            "module": "steamingpile",
+            "args": [
+                "--user=your_user_name_here",
+                "--command=friends"
+            ]
+        },
+        {
+            "name": "Friends (force)",
+            "type": "python",
+            "request": "launch",
+            "module": "steamingpile",
+            "args": [
+                "--user=your_user_name_here",
+                "--command=\"friends --force\""
+            ]
+        }
+    ]
+}
