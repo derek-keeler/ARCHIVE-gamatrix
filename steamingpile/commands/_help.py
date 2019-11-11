@@ -1,5 +1,6 @@
 from typing import List
 
+import steamingpile.doc as appdoc
 from steamingpile import interfaces
 
 from . import _abc
@@ -12,4 +13,4 @@ class Help(_abc.Command):
         super().__init__(cfg)
 
     def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> List[str]:
-        return ["Show help here."]
+        return appdoc.__doc__.split("\n")

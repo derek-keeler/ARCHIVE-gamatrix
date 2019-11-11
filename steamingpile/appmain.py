@@ -1,4 +1,4 @@
-"""Main driver for the SteamingPile program."""
+"""Application entry point via the `run` method of the SteamingPile class."""
 
 import pickle
 from typing import Dict, List, Optional
@@ -188,6 +188,7 @@ class SteamingPile(interfaces.IClientProvider):
     def run_interactive(self):
         """Wait for textual commands to respond to."""
 
+        print("Welcome to steamingpile. Type 'help' for help.")
         cmd = input("steamingpile cmd: ")
         keep_accepting_commands = True
 

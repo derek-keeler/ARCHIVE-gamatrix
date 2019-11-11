@@ -15,7 +15,9 @@ def get_command(command: str, config: interfaces.IConfiguration) -> Tuple[Comman
     """Ensure the command issued is one we support else return 'Unknown' command to notify user."""
     command_name, _, arguments = command.strip("\"' ").partition(" ")
     cmd_map = _mapping(config)
-    cmd = cmd_map[command_name.lower()]
+    cmd = None
+    if command_name.lower() in cmd_map:
+        cmd = cmd_map[command_name.lower()]
     if cmd is None:
         cmd = cmd_map["unknown"]
         arguments = command_name
