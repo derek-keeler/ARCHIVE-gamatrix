@@ -1,7 +1,7 @@
 """Test the configuration object and command-line options."""
 import unittest
 
-import docopt
+import docopt  # type: ignore
 
 from steamingpile import config
 from steamingpile import doc as appdoc

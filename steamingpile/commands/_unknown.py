@@ -19,7 +19,7 @@ class Unknown(_abc.Command):
         if arguments:
             command = f"'{arguments}'"
 
-        return [f"Unkown argument {command}.", "Please use the 'help' command to see available commands"]
+        return [f"Unknown argument {command}.", "Please use the 'help' command to see available commands"]
 
     def help_brief(self):
         return ""

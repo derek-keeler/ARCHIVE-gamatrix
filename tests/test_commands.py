@@ -1,5 +1,5 @@
 """Ensure each command is present in the main app."""
-import pytest
+import pytest  # type: ignore
 
 from steamingpile import commands
 from steamingpile import types

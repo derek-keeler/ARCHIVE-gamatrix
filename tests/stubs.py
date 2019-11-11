@@ -63,18 +63,26 @@ class SettableClientProvider(interfaces.IClientProvider):
     set_friends: List[types.FriendInformation] = []
     set_games: List[types.GameInformation] = []
     set_user_id: str = ""
+    get_friends_forced = False
+    get_games_forced = False
+    get_user_id_forced = False
+    get_user_id_friend_name = ""
 
     def get_cached_friends(self) -> Optional[List[types.FriendInformation]]:
         return self.set_friends
 
     def get_friends(self, force: bool = False) -> List[types.FriendInformation]:
+        self.get_friends_forced = force
         return self.set_friends
 
     def get_cached_games(self, user_id: str) -> Optional[List[types.GameInformation]]:
         return self.set_games
 
     def get_games(self, user_id: str, force: bool = False) -> List[types.GameInformation]:
+        self.get_games_forced = force
         return self.set_games
 
     def get_user_id(self, friend_name: str = "", force: bool = False) -> str:
+        self.get_user_id_forced = force
+        self.get_user_id_friend_name = friend_name
         return self.set_user_id
