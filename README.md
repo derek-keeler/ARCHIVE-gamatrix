@@ -14,6 +14,8 @@ Once you have this number, you can either:
   and copy your key to the file without quotation marks and on the first line of the file. The rest of the file
   will be ignored.
 
+#### Windows
+
 ```powershell
 py -3.7 -m venv .venv
 .venv/Scripts/Activate.ps1
@@ -24,6 +26,17 @@ python -m pip install -r requirements.txt
 python -m pip install pip-tools
 pip-compile
 python -m pip install -r requirements.txt
+```
+
+#### Linux
+
+Python 3.6:
+
+```bash
+python3 -m venv venv
+. venv/bin/activate
+python3 -m pip install -r requirements.txt dataclasses
+python3 -m steamingpile
 ```
 
 ### How to run tests
