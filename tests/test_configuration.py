@@ -23,6 +23,8 @@ def test_apikey_file(monkeypatch):
     """Does the apikey get resolved from the dotfile at the root of the app?"""
     from unittest.mock import patch, mock_open
 
+    # For this process, ensure the env var is blanked out...
+    monkeypatch.delenv("USER_STEAM_API_DEV_KEY", raising=False)
     with patch("pathlib.Path.is_file", unittest.mock.Mock(return_value=True)):
         with patch("builtins.open", mock_open(read_data=TEST_RUN_API_KEY)):
             opts = docopt.docopt(appdoc.__doc__, version="0.0.0+test_run_only", argv=[])
