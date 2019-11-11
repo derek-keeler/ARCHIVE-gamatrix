@@ -12,7 +12,7 @@ Options:
     --force             Get game information for friend and refresh saved game info for that friend.
 """  # noqa501
 
-import docopt                       # type: ignore
+import docopt  # type: ignore
 from typing import List
 
 from . import _abc

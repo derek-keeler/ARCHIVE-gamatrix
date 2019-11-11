@@ -3,9 +3,9 @@
 import pickle
 from typing import Dict, List, Optional
 
-import steam.client                 # type: ignore
-import steam.enums                  # type: ignore
-import steam.webapi                 # type: ignore
+import steam.client  # type: ignore
+import steam.enums  # type: ignore
+import steam.webapi  # type: ignore
 
 from . import interfaces
 from . import commands

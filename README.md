@@ -1,5 +1,7 @@
 # Steamingpile
 
+[![Actions Status](https://github.com/d3r3kk/steamingpile/workflows/pythonapp/badge.svg)](https://github.com/d3r3kk/steamingpile/actions)
+
 An app to help you and your Steam friends determine what game to play.
 
 ## Contents
@@ -19,6 +21,7 @@ An app to help you and your Steam friends determine what game to play.
 ```bash
 git clone https://github.com/d3r3kk/steamingpile
 cd steamingpile
+echo "my_personal_steam_web_api_key" > .user_steam_api_dev_key # get key here: https://steamcommunity.com/dev/apikey
 ```
 
 > _Step #2 Option A: **Windows Powershell**_
@@ -65,7 +68,7 @@ python -m steamingpile
 `steamingpile` is a Python app, so instead of building you set up an environment. Our suggestion is that you create a
 _virtual environment_ using the built-in Python library `venv` to do so. Instructions to get a `venv` up and running:
 
-### Windows
+### Windows Prep
 
 1. Open a Powershell window.
     - *Start->Powershell*
@@ -78,8 +81,9 @@ _virtual environment_ using the built-in Python library `venv` to do so. Instruc
     - `py -3.8 -m venv .venv --prompt "steamingpile"`
       - (alternatively, use `py -3.7 ...` for Python version 3.7)
     - `.venv/Scripts/Activate.ps1`
+      - If you get errors stating that the `...Execution policy is Restricted...`, see [Troubleshooting](#troubleshooting).
 
-### Linux/Mac
+### Linux/Mac Prep
 
 1. Open a terminal.
     - *Meta->Terminal*
@@ -146,3 +150,44 @@ Basic Premise: _Be excellent to each other_.
 
 In general, this means that everyone is expected to be **open**, **considerate**, and
 **respectful**, of others no matter what their perspective is within this project.
+
+## Troubleshooting
+
+### Windows Problems
+
+---
+
+**Issue:** The C++ Build Tools aren't available.
+
+Error message occurs during `python -m pip install -r requirements.txt` stage.
+
+Error message ends with:
+`"distutils.errors.DistutilsPlatformError: Microsoft Visual C++ 14.0 is required. Get it with "Microsoft Visual C++ Build Tools": https://visualstudio.microsoft.com/downloads/"`
+
+**Solution:** Install the Microsoft build tools by installing the Visual Studio Community Edition from the link provided. Be certain to install the `MSVC v[VER] - VS 20xx C++ x64/x86 build tools (vMAJ.MIN)` are selected in "Individual Components" within the Visual Studio installer. You can install the "Desctop development with C++" workload to ensure you get everything. Alternatively, install only the "C++ Build Tools" workload for the latest Visual Studio (currently [you can find them for Visual Studio 2019 here](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019)).
+
+---
+
+**Issue:** The Powershell `Activate.ps1` script raises permissions errors.
+
+Error message occurs during activation of the Python environment `.venv\Scripts\Activate.ps1`.
+
+Error message is:
+
+```pwsh
+.\.venv\Scripts\Activate.ps1 : File C:\path\to\steamingpile\.venv\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies at https://go.microsoft.com/fwlink/?LinkID=135170.
+At line:1 char:1
++ .\.venv\Scripts\Activate.ps1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++ CategoryInfo          : SecurityError: (:) [], PSSecurityException
++ FullyQualifiedErrorId : UnauthorizedAccess
+```
+
+**Solution:** The Powershell access is set to something _less than_ `RemoteSigned`. Change the execution
+policy to `RemoteSigned`.
+
+```pwsh
+ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+ ```
+
+---

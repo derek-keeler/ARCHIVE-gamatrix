@@ -47,7 +47,7 @@ Dotfiles:
                             Steam API key. Get one here https://steamcommunity.com/dev/apikey.
 """  # noqa501
 
-import docopt                 # type: ignore
+import docopt  # type: ignore
 
 from . import steaming_pile_config
 from steamingpile.steaming_pile import SteamingPile
