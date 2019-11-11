@@ -1,6 +1,6 @@
 # Steamingpile
 
-[![Actions Status](https://github.com/d3r3kk/steamingpile/workflows/pythonapp/badge.svg)](https://github.com/d3r3kk/steamingpile/actions)
+![Build Status Badge](https://github.com/d3r3kk/steamingpile/workflows/CI/badge.svg)
 
 An app to help you and your Steam friends determine what game to play.
 
