@@ -3,6 +3,7 @@ from typing import Dict, Optional
 
 from ._abc import Command  # noqa F401
 from ._compare import Compare
+from ._configure import Configure
 from ._exit import Exit
 from ._friends import Friends
 from ._games import Games

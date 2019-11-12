@@ -22,12 +22,22 @@ class IConfiguration(abc.ABC):
     def command_args(self) -> List[str]:
         raise NotImplementedError
 
+    @property
     @abc.abstractmethod
     def output_format(self) -> str:
         raise NotImplementedError
 
+    @output_format.setter
+    def output_format(self, value: str):
+        raise NotImplementedError
+
+    @property
     @abc.abstractmethod
     def output_file(self) -> pathlib.Path:
+        raise NotImplementedError
+
+    @output_file.setter
+    def output_file(self, value: pathlib.Path):
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -48,4 +58,17 @@ class IConfiguration(abc.ABC):
     @abc.abstractmethod
     def force(self) -> bool:
         """Did the user set the global option to force retrieval from the game service?"""
+        raise NotImplementedError
+
+    @property
+    @abc.abstractmethod
+    def disable_stdout(self) -> bool:
+        raise NotImplementedError
+
+    @disable_stdout.setter
+    def disable_stdout(self, value: bool):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def print(self) -> List[str]:
         raise NotImplementedError
