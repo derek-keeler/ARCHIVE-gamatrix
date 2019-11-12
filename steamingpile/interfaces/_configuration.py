@@ -35,6 +35,10 @@ class IConfiguration(abc.ABC):
     def output_file(self, value: pathlib.Path):
         raise NotImplementedError
 
+    @output_file.setter
+    def output_file(self, value: pathlib.Path):
+        raise NotImplementedError
+
     @abc.abstractmethod
     def api_key(self) -> str:
         raise NotImplementedError

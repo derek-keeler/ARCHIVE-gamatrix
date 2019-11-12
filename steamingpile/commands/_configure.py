@@ -4,7 +4,7 @@ Change the configuration of the application during runtime.
 Usage:
   configure --output-file=FILE
   configure --output-format=FRMT
-  configure (--stdout | --no-stdout)
+  configure < --stdout | --no-stdout >
   configure --print
 
 Details:
@@ -17,7 +17,7 @@ Details:
 """  # noqa
 
 import pathlib
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import docopt
 

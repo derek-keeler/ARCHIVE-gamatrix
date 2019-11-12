@@ -28,16 +28,15 @@ class SteamingPileConfig(interfaces.IConfiguration):
 
     @property
     def output_format(self) -> str:
-        if ("--output-format" not in self.args or not self.args["--output-format"]) or (
-            self.args["--output-format"].lower() not in SupportedOutputTypes
-        ):
-            self.args["--output-format"] = SupportedOutputTypes[0]
-        return self.args["--output-format"].lower()
+        for ot in SupportedOutputTypes:
+            if ot.value == self.args["--output-format"]:
+                return ot.value
+        return SupportedOutputTypes.TEXT.value
 
     @output_format.setter
     def output_format(self, value: str):
-        if value.lower() in SupportedOutputTypes:
-            self.args["--output-format"] = value.lower()
+        if value in SupportedOutputTypes:
+            self.args["--output-format"] = value
         else:
             print(f"Given format type '{value}' not a valid type. See help for valid formats.")
 
