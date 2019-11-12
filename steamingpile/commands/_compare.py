@@ -46,7 +46,7 @@ class Compare(_abc.Command):
 
         args = self.cmdline_parse_args(arguments)
 
-        opt = docopt.docopt(__doc__, argv=args, version=COMPARE_CMD_VERSION)
+        opt = docopt.docopt(__doc__, argv=self.split_arguments(arguments), version=COMPARE_CMD_VERSION)
 
         # get a list of unique, valid, friends
         friends = list(filter(lambda f: f.name in opt["--friend"], client_provider.get_friends(force=opt["--force"])))

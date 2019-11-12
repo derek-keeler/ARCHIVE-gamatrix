@@ -3,6 +3,7 @@ from typing import Dict, Tuple
 
 from ._abc import Command  # noqa F401
 from ._compare import Compare
+from ._configure import Configure
 from ._exit import Exit
 from ._friends import Friends
 from ._games import Games
@@ -32,6 +33,6 @@ def get_command(command: str, config: interfaces.IConfiguration) -> Tuple[Comman
 def _mapping(config: interfaces.IConfiguration) -> Dict:
     """Get a command object based on its name. Cached to not continuously get new objects."""
     _command_mapping: Dict[str, Command] = {
-        cls.__name__.lower(): cls(cfg=config) for cls in (Compare, Exit, Friends, Games, Help, Unknown)
+        cls.__name__.lower(): cls(cfg=config) for cls in (Compare, Configure, Exit, Friends, Games, Help, Unknown)
     }
     return _command_mapping

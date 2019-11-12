@@ -30,3 +30,12 @@ class Command(abc.ABC):
 
     def help_detailed(self) -> List[str]:
         return [self.help_brief()]
+
+    def split_arguments(self, arguments: str) -> List[str]:
+        """Split a command line to handle arguments that may have spaces in their values."""
+
+        # Split on the argument moniker '--' and try and put it back in front of each occurrance
+        args_split = [f"--{a.strip()}" for a in arguments.split("--")]
+
+        # filter out any '--' elements left lying around
+        return list(filter(lambda a: a != "--", args_split))
