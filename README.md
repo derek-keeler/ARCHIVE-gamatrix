@@ -119,6 +119,16 @@ now run the application.
 1. Run the application.
     - `python -m steamingpile`
 
+### Examples
+
+Show friends:
+
+`python -m steamingpile --user=<username> --passwd='<password>' friends`
+
+Compare games with `friend1` and `friend2`:
+
+`python -m steamingpile --user=<username> --passwd='<password>' --command='compare --friend=<friend1> --friend=<friend2>'`
+
 ## How to Contribute
 
 Quick setup steps...
