@@ -39,7 +39,7 @@ class Games(_abc.Command):
 
         game_info = client_provider.get_games(user_id=user_id_to_get_games_for, force=games_opts["--force"])
 
-        return [f"{g.name} [appid:{g.appid}]" for g in game_info]
+        return sorted([f"{g.name} [appid:{g.appid}]" for g in game_info], key=str.lower)
 
     def help_brief(self):
         return "Return a list of all steam games owned"

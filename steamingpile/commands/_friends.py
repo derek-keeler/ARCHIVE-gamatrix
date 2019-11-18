@@ -32,4 +32,4 @@ class Friends(_abc.Command):
         opts = docopt.docopt(__doc__, argv=arguments.split(), version=FRIENDS_CMD_VERSION)
         friends_list = client_provider.get_friends(force=opts["--force"])
 
-        return [f"{f.name} [{f.user_id}]" for f in friends_list]
+        return sorted([f"{f.name} [{f.user_id}]" for f in friends_list], key=str.lower)
