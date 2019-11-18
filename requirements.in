@@ -1,8 +1,9 @@
 # dev deps:
 black
 flake8
-pytest
 mypy
+pytest
+rope
 # runtime deps:
 docopt
 steam==1.0.0a6

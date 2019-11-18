@@ -43,6 +43,7 @@ python3 -m venv .venv
 ```bash
 python -m pip install -U pip
 python -m pip install -r requirements.txt
+pytest # This is optional, if you are going to do some development...
 python -m steamingpile
 ```
 
@@ -134,14 +135,36 @@ Compare games with `friend1` and `friend2`:
 Quick setup steps...
 
 1. Clone the repo.
-1. Create your own feature branch off of master.
+
+    - `git clone https://github.com/d3r3kk/steamingpile`
+
 1. Create your local Python virtual environment and install requirements.txt.
+
+    - `python -m venv .venv`
+    - `. .venv/bin/activate`
+    - `python -m pip install -U pip`
+    - `python -m pip install -r requirements.txt`
+
 1. **Important**: Ensure tests all run and pass before you start!
-1. Create a feature branch to work in.
+
+    - `pytest`
+
+1. Create your own feature branch off of master.
+
+    - `git checkout -b my_feature master`
+
 1. Do your work.
 1. Ensure tests pass.
+
+    - `pytest`
+
 1. Push your feature branch.
+
+    - `git push --set-upstream origin my_feature`
+
 1. Create a PR against `master` via Github.
+
+---
 
 > NOTE: If you need to update `requirements.txt`
 
@@ -153,6 +176,7 @@ python -m pip install pip-tools
 pip-compile
 python -m pip install -r requirements.txt
 ```
+---
 
 ## Code of Conduct
 

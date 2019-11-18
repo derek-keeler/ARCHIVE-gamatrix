@@ -42,11 +42,8 @@ class Compare(_abc.Command):
 
     def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> List[str]:
         """Compare the logged-in user's games to the friends specified."""
-        # We need to split this command line in an odd way to handle friends who have spaces in their names
-        # split on the argument moniker '--' and try and put it back in front of each occurrance
-        args_split = [f"--{a.strip()}" for a in arguments.split("--")]
-        # filter out any '--' elements left lying around
-        args = list(filter(lambda a: a != "--", args_split))
+
+        args = self.cmdline_parse_args(arguments)
 
         opt = docopt.docopt(__doc__, argv=args, version=COMPARE_CMD_VERSION)
 

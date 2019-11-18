@@ -1,8 +1,48 @@
 import pathlib
+import random
 from typing import List, Optional
 
 from steamingpile import interfaces
 from steamingpile import types
+
+
+alpha = "abcdefghijklmnopqrstuvwxyz"
+numeric = "1234567890"
+punctuation = "_- "
+
+
+def get_random_name(
+    include_punctuation: bool = True, length_min: int = 4, length_max: int = 12, selection_set: Optional[str] = None,
+) -> str:
+    """Return a random name of length between min and max made up of [a-zA-Z0-9 _-]."""
+
+    if selection_set is None:
+        selection_set = alpha + alpha.upper() + numeric + punctuation
+
+    name_len = length_min
+    if length_min < length_max:
+        name_len = random.choice(range(length_min, length_max))
+    return "".join(random.sample(selection_set, name_len))
+
+
+def get_random_id():
+    return get_random_name(include_punctuation=False, length_min=10, length_max=10, selection_set=numeric + "ABCDEF")
+
+
+def get_random_friends(count: int = 1) -> List[types.FriendInformation]:
+    return [types.FriendInformation(name=get_random_name(), user_id=get_random_id()) for i in range(count)]
+
+
+def get_random_games(count: int = 1) -> List[types.GameInformation]:
+    return [types.GameInformation(name=get_random_name(), appid=get_random_id()) for i in range(count)]
+
+
+def get_friends(count: int = 1, name_prefix: str = "Friend ") -> List[types.FriendInformation]:
+    return [types.FriendInformation(name=f"{name_prefix}{i + 1}", user_id=f"{i:10X}") for i in range(count)]
+
+
+def get_games(count: int = 1, game_name_prefix: str = "Game ") -> List[types.GameInformation]:
+    return [types.GameInformation(name=f"{game_name_prefix}{i + 1:03d}", appid=f"{i + 1:010X}") for i in range(count)]
 
 
 class Config(interfaces.IConfiguration):
@@ -38,7 +78,7 @@ class Config(interfaces.IConfiguration):
         return self.cache_path_val
 
 
-class NoneCientProvider(interfaces.IClientProvider):
+class NoneClientProvider(interfaces.IClientProvider):
     """Mock client provider that returns None for each request for a client."""
 
     def get_cached_friends(self) -> Optional[List[types.FriendInformation]]:

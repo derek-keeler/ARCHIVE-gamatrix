@@ -31,7 +31,9 @@ class Games(_abc.Command):
     def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> List[str]:
         """Return the list of stored friend information."""
 
-        games_opts = docopt.docopt(__doc__, argv=arguments.split(), version=GAMES_CMD_VERSION)
+        args = self.cmdline_parse_args(arguments)
+
+        games_opts = docopt.docopt(__doc__, argv=args, version=GAMES_CMD_VERSION)
 
         user_id_to_get_games_for = client_provider.get_user_id(
             friend_name=games_opts["--friend"], force=games_opts["--force"]

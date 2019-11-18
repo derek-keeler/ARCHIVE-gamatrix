@@ -13,7 +13,11 @@ from steamingpile import interfaces
 
 def get_command(command: str, config: interfaces.IConfiguration) -> Tuple[Command, str]:
     """Ensure the command issued is one we support else return 'Unknown' command to notify user."""
-    command_name, _, arguments = command.strip("\"' ").partition(" ")
+
+    while command[0] == command[-1] and command.startswith(('"', "'")):
+        command = command[1:-1]
+
+    command_name, _, arguments = command.partition(" ")  # strip("\"' ")
     cmd_map = _mapping(config)
     cmd = None
     if command_name.lower() in cmd_map:
@@ -26,6 +30,7 @@ def get_command(command: str, config: interfaces.IConfiguration) -> Tuple[Comman
 
 @functools.lru_cache()
 def _mapping(config: interfaces.IConfiguration) -> Dict:
+    """Get a command object based on its name. Cached to not continuously get new objects."""
     _command_mapping: Dict[str, Command] = {
         cls.__name__.lower(): cls(cfg=config) for cls in (Compare, Exit, Friends, Games, Help, Unknown)
     }
