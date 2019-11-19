@@ -8,7 +8,7 @@ Usage:
   steamingpile.py
   steamingpile.py (-h | --help)
   steamingpile.py --version
-  steamingpile.py [--user=<usr>] [--passwd=<pwd>] [--command=<cmd>] [--no-stdout] [--user-steam-api-dev-key=<key>]
+  steamingpile.py [--user=<usr>] [--passwd=<pwd>] [--command=<cmd>] [--quiet] [--user-steam-api-dev-key=<key>]
 
 Options:
   -h --help                         Show this screen.
@@ -17,7 +17,7 @@ Options:
   -p --passwd=<pwd>                 Steam user password.
   -c --command=<cmd>                Run this command and exit. For commands that take > 1 arg
                                     enclose the command and args in quotes.
-  -q --no-stdout                    Do not send output to stdout from any commands. Useful when used with --output-file.
+  -q --quiet                        Do not send output to stdout from any commands. Useful when used with --output-file.
   -o --output-file=PATH             Send all command output to the file specified in PATH. If it exist, it will be
                                     overwritten.
   -f --output-format=FRMT           Output file format. You can specify one of [JSON, TEXT, or CSV], default is TEXT.
