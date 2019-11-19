@@ -16,12 +16,18 @@ Usage:
 Options:
   -h --help                         Show this screen.
   -v --version                      Show version.
-  --user=<usr>                      Game launcher client user name.
-  --passwd=<pwd>                    Game launcher client password.
-  <cmd>                             Run this command and exit. ()
-  <args>                            Arguments to pass to the command being run, see 'help <cmd>' for details.
+  -u --user=<usr>                   Steam user name.
+  -p --passwd=<pwd>                 Steam user password.
+  -c --command=<cmd>                Run this command and exit. For commands that take > 1 arg
+                                    enclose the command and args in quotes.
+  -q --quiet                        Do not send output to stdout from any commands. Useful when used with --output-file.
+  -o --output-file=PATH             Send all command output to the file specified in PATH. If it exist, it will be
+                                    overwritten.
+  -f --output-format=FRMT           Output file format. You can specify one of [JSON, TEXT, or CSV], default is TEXT.
   --user-steam-api-dev-key=<key>    Your own personal Steam API dev key. See description below in
                                     Environment Variables/Dotfiles sections.
+  <cmd>                             Run this command and exit. ()
+  <args>                            Arguments to pass to the command being run, see 'help <cmd>' for details.
 
 Commonly used commands:
     help [CMD]    Print all available commands. If a CMD is specified print the help for that command.

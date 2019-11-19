@@ -1,6 +1,7 @@
 """Configuration values used during the runtime of Steamingpile."""
 
 import enum
+import json
 import os
 import pathlib
 from typing import List, Optional
@@ -76,15 +77,19 @@ class SteamingPileConfig(interfaces.IConfiguration):
         return self.config_path().joinpath(".steamingpile/cache")
 
     @property
-    def disable_stdout(self) -> bool:
-        return self.args["--no-stdout"]
+    def enable_stdout(self) -> bool:
+        return self.args["--quiet"]
 
-    @disable_stdout.setter
-    def disable_stdout(self, value: bool):
-        self.args["--no-stdout"] = value
+    @enable_stdout.setter
+    def enable_stdout(self, value: bool):
+        self.args["--quiet"] = not value
 
     def print(self) -> List[str]:
-        return [self.args.__str__()]
+        a = [
+            f"{key.strip('-')}{'.' * (80 - len(key.strip('-')) - len(str(self.args[key])))}{str(self.args[key])}"
+            for key in self.args.keys()
+        ]
+        return a
 
     def _get_api_key(self, cmdline_key: str = None) -> str:
         """Return the API Dev key supplied by Steam to this user, or None."""

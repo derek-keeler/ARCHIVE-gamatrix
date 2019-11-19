@@ -62,11 +62,11 @@ class IConfiguration(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def disable_stdout(self) -> bool:
+    def enable_stdout(self) -> bool:
         raise NotImplementedError
 
-    @disable_stdout.setter
-    def disable_stdout(self, value: bool):
+    @enable_stdout.setter
+    def enable_stdout(self, value: bool):
         raise NotImplementedError
 
     @abc.abstractmethod

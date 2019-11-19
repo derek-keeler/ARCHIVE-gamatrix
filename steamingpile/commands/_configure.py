@@ -4,7 +4,7 @@ Change the configuration of the application during runtime.
 Usage:
   configure --output-file=FILE
   configure --output-format=FRMT
-  configure < --stdout | --no-stdout >
+  configure (--stdout | --no-stdout)
   configure --print
 
 Details:
@@ -17,7 +17,7 @@ Details:
 """  # noqa
 
 import pathlib
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 import docopt
 
@@ -37,7 +37,7 @@ class Configure(_abc.Command):
         cmd_output = ["Config command result:"]
 
         try:
-            opt = docopt.docopt(__doc__, argv=self.split_arguments(arguments))
+            opt = docopt.docopt(__doc__, argv=self.split_arguments(arguments), help=False)
         except docopt.DocoptExit:
             cmd_output = [f"ERROR: Unknown options given in command: '{arguments}'."]
             cmd_output.extend(__doc__.splitlines())
@@ -54,11 +54,11 @@ class Configure(_abc.Command):
             self._config.disable_stdout = False
             cmd_output.append("Enabled stdout output during command execution.")
 
-        elif "--no-stdout" in opt and opt["--stdout"]:
+        elif "--no-stdout" in opt and opt["--no-stdout"]:
             self._config.disable_stdout = True
             cmd_output.append("Disabled stdout output during command execution.")
 
         elif "--print" in opt and opt["--print"]:
-            cmd_output.append(self._config.args)
+            cmd_output.extend(self._config.print())
 
         return cmd_output
