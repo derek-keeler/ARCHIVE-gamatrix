@@ -51,11 +51,11 @@ class Configure(_abc.Command):
             cmd_output.append(f"Setting output format to {self._config.output_format}")
 
         elif "--stdout" in opt and opt["--stdout"]:
-            self._config.disable_stdout = False
+            self._config.enable_stdout = True
             cmd_output.append("Enabled stdout output during command execution.")
 
         elif "--no-stdout" in opt and opt["--no-stdout"]:
-            self._config.disable_stdout = True
+            self._config.enable_stdout = False
             cmd_output.append("Disabled stdout output during command execution.")
 
         elif "--print" in opt and opt["--print"]:

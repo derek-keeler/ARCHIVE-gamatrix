@@ -2,7 +2,7 @@
 
 import abc
 import pathlib
-from typing import List
+from typing import List, Optional
 
 
 class IConfiguration(abc.ABC):
@@ -28,8 +28,7 @@ class IConfiguration(abc.ABC):
         raise NotImplementedError
 
     @property
-    @abc.abstractmethod
-    def output_file(self) -> pathlib.Path:
+    def output_file(self) -> Optional[pathlib.Path]:
         raise NotImplementedError
 
     @output_file.setter

@@ -12,7 +12,7 @@ punctuation = "_- "
 
 
 def get_random_name(
-    include_punctuation: bool = True, length_min: int = 4, length_max: int = 12, selection_set: Optional[str] = None,
+    include_punctuation: bool = True, length_min: int = 4, length_max: int = 12, selection_set: Optional[str] = None
 ) -> str:
     """Return a random name of length between min and max made up of [a-zA-Z0-9 _-]."""
 
@@ -55,6 +55,7 @@ class Config(interfaces.IConfiguration):
     passwd_val = "passwd"
     user_val = "user"
     cache_path_val = pathlib.Path().cwd()
+    stdout_enabled = True
 
     def api_key(self) -> str:
         return self.api_key_val
@@ -76,6 +77,17 @@ class Config(interfaces.IConfiguration):
 
     def cache_path(self) -> pathlib.Path:
         return self.cache_path_val
+
+    @property
+    def enable_stdout(self) -> bool:
+        return self.stdout_enabled
+
+    @enable_stdout.setter
+    def enable_stdout(self, value: bool):
+        self.stdout_enabled = value
+
+    def print(self):
+        return "Testing config object only"
 
 
 class NoneClientProvider(interfaces.IClientProvider):
