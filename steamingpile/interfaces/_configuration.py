@@ -32,8 +32,7 @@ class IConfiguration(abc.ABC):
         raise NotImplementedError
 
     @property
-    @abc.abstractmethod
-    def output_file(self) -> pathlib.Path:
+    def output_file(self) -> Optional[pathlib.Path]:
         raise NotImplementedError
 
     @output_file.setter

@@ -90,6 +90,9 @@ class Config(interfaces.IConfiguration):
     def force(self) -> bool:
         return self.force_flag
 
+    def print(self):
+        return "Testing config object only"
+
 
 class NoneClientProvider(interfaces.IClientProvider):
     """Mock client provider that returns None for each request for a client."""
