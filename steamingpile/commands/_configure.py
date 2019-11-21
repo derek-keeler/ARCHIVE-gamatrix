@@ -19,7 +19,7 @@ Details:
 import pathlib
 from typing import Any, Dict, List, Optional
 
-import docopt
+import docopt  # type: ignore
 
 from steamingpile import interfaces
 
@@ -35,9 +35,10 @@ class Configure(_abc.Command):
     def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> List[str]:
         opt: Dict[str, Any] = {}
         cmd_output = ["Config command result:"]
+        args = self.cmdline_parse_args(arguments)
 
         try:
-            opt = docopt.docopt(__doc__, argv=self.split_arguments(arguments), help=False)
+            opt = docopt.docopt(__doc__, argv=args, help=False)
         except docopt.DocoptExit:
             cmd_output = [f"ERROR: Unknown options given in command: '{arguments}'."]
             cmd_output.extend(__doc__.splitlines())

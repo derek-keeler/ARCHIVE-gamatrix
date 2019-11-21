@@ -185,6 +185,10 @@ class SteamingPile(interfaces.IClientProvider):
             self.run_interactive()
         self._do_exit()
 
+    def get_output_formatter(self) -> types.IOutputFormatter:
+        """Return the currently designated output formatter."""
+        self.config.
+
     def run_interactive(self):
         """Wait for textual commands to respond to."""
 
@@ -203,7 +207,9 @@ class SteamingPile(interfaces.IClientProvider):
                     # results = exec_cmd.run(arguments)
                     results = exec_cmd.run(arguments, self)
 
-                    print(*results, sep="\n")
+                    output = self.get_output_formatter()
+                    output.write_results(results)
+
                     cmd = input("steamingpile cmd: ")
 
                 except types.SteamingExit:
