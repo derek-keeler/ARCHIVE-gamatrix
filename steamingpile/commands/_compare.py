@@ -3,15 +3,17 @@ the games owned by the currently logged in user. The user can be specified
 by their steam ID or by their steam user name.
 
 Usage:
-    compare --friend=USER ... [--force]
+    compare --friend=USER ... [--force] [--all-owned-games]
 
 Options:
-    --friend=USER     Specify the user name of the game client friend to compare the games with,
-                       multiple separated by commas.
-    --force            Force a refresh of information from the game client.
+    -f --friend=USER        Specify the user name of the game client friend to compare the games with,
+                            multiple separated by commas.
+    -F --force              Force a refresh of information from the game client.
+    -a --all-owned-games    Only output games that are owned by every friend specified.
 """
 
 import dataclasses
+import datetime
 from typing import Any, Dict, List
 
 import docopt  # type: ignore
@@ -31,9 +33,8 @@ class CompareCmdOptions:
 
 @dataclasses.dataclass
 class FriendGameComparison:
-    game_id: str
-    game_name: str
     owned_by: List[types.FriendInformation]
+    game: types.GameInformation
 
 
 class Compare(_abc.Command):
@@ -47,17 +48,12 @@ class Compare(_abc.Command):
 
         opt = docopt.docopt(__doc__, argv=args, version=COMPARE_CMD_VERSION)
 
-        # Add myself to the beginning of the list
-        friends = client_provider.get_friends(force=opt["--force"])
-        comparison_friend_names = [f.strip("'").strip('"') for f in opt["--friend"]]
-        compare_friends: List[types.FriendInformation] = []
-        for f in friends:
-            if f.name in comparison_friend_names and f.name not in compare_friends:
-                compare_friends.append(f)
-
+        # get a list of unique, valid, friends
+        friends = list(filter(lambda f: f.name in opt["--friend"], client_provider.get_friends(force=opt["--force"])))
         game_list: Dict[str, FriendGameComparison] = {}
 
-        for friend in compare_friends:
+        # build up a list of games, and add friends who own each game as attributes of each game
+        for friend in friends:
 
             friend_games = client_provider.get_games(user_id=friend.user_id, force=opt["--force"])
 
@@ -65,37 +61,51 @@ class Compare(_abc.Command):
                 if game.appid in game_list:
                     game_list[game.appid].owned_by.append(friend)
                 else:
-                    game_list[game.appid] = FriendGameComparison(
-                        game_id=game.appid, game_name=game.name, owned_by=[friend]
-                    )
+                    game_list[game.appid] = FriendGameComparison(owned_by=[friend], game=game)
 
-        # flatten this list
+        # create output lists, by number of friends who own each game
+        # output the list of games owned by everyone first.
 
+        # create the title row and pre-populate each list of games by number of owners...
         title_row = ["Game"]
         games_by_num_owners: List[List[Any]] = []
-        for i in range(len(compare_friends)):
+        for friend in friends:
             games_by_num_owners.append([])
+            title_row.append(f'"{friend.name}"')
+        title_row.append("Notes")
 
+        skip_partial_owned = opt["--all-owned-games"]
+
+        # inspect each game and convert to a linear row of data
         for key in game_list.keys():
+
+            # only bother to record partially-owned games if we need to
+            if skip_partial_owned and len(game_list[key].owned_by) != len(friends):
+                continue
+
             current_game = game_list[key]
-            game_row: List[Any] = [f'"{current_game.game_name}"']  # add quotes to satisfy CSV nonsense
-            owned_by_counter = 0
-            for friend in compare_friends:
-                if len(title_row) < len(compare_friends) + 1:
-                    title_row.append(f'"{friend.name}"')  # again, sigh
+            game_row: List[Any] = [f'"{current_game.game.name}"']  # add quotes to satisfy CSV nonsense
+
+            # order is important, each entry is either True or False
+            for friend in friends:
                 game_row.append(friend in current_game.owned_by)
-                owned_by_counter = owned_by_counter + int(friend in current_game.owned_by)
-            games_by_num_owners[owned_by_counter - 1].append(game_row)
 
+            # append this to the right number-owned games list
+            games_by_num_owners[len(game_list[key].owned_by) - 1].append(game_row)
+
+        gol: List[List[str]] = [[""], [f"compare: Generated on {datetime.datetime.now()}"]]
+        # output a summary
+        for index in reversed(range(len(friends))):
+            if len(games_by_num_owners[index]) > 0:
+                gol.append([f"OWNED BY {index+1} FRIENDS (count={len(games_by_num_owners[index])})"])
+
+        gol.append([""])
         # start building the output.
-        gol = [title_row]
-        gol.append([f"OWNED BY ALL FRIENDS (count={len(games_by_num_owners[len(compare_friends) - 1])})"])
-        gol.extend(games_by_num_owners[len(compare_friends) - 1])
+        gol.extend([title_row])
 
-        index = len(compare_friends) - 2
-        while index >= 0:
-            gol.append([f"OWNED BY {index+1} FRIENDS (count={len(games_by_num_owners[index])})"])
-            gol.extend(games_by_num_owners[index])
-            index = index - 1
+        # combine the lists
+        for index in reversed(range(len(friends))):
+            if len(games_by_num_owners[index]) > 0:
+                gol.extend(games_by_num_owners[index])
 
         return [",".join(str(item) for item in row) for row in gol]
