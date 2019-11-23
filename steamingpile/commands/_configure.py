@@ -19,7 +19,7 @@ Details:
 import pathlib
 from typing import Any, Dict, List
 
-import docopt
+import docopt  # type: ignore
 
 from steamingpile import interfaces
 
