@@ -7,7 +7,7 @@ import steamingpile.doc as appdoc
 STEAMINGPILE_VERSION = 0.9
 
 if __name__ == "__main__":
-    opt = docopt.docopt(appdoc.__doc__, version=STEAMINGPILE_VERSION)
+    opt = docopt.docopt(appdoc.__doc__, version=STEAMINGPILE_VERSION, options_first=True)
 
     conf = appcfg.SteamingPileConfig(opt)
     if conf.api_key() == "":

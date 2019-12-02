@@ -3,7 +3,7 @@
 import enum
 import os
 import pathlib
-from typing import Optional
+from typing import List, Optional
 
 from . import interfaces
 
@@ -29,8 +29,11 @@ class SteamingPileConfig(interfaces.IConfiguration):
     def passwd(self) -> str:
         return self.args["--passwd"]
 
-    def command(self) -> str:
-        return self.args["--command"]
+    def command(self) -> Optional[str]:
+        return self.args["<cmd>"]
+
+    def command_args(self) -> List[str]:
+        return self.args["<args>"] or []
 
     def output_format(self) -> str:
         for ot in SupportedOutputTypes:
@@ -41,15 +44,23 @@ class SteamingPileConfig(interfaces.IConfiguration):
     def output_file(self) -> pathlib.Path:
         return pathlib.Path(self.args["--output-file"])
 
+    @property
+    def force(self) -> bool:
+        return self.args["--force"]
+
     def api_key(self) -> str:
         """Get the API key from the command line, environment variable, or dotfile."""
         if self._api_key is None:
             self._api_key = self._get_api_key(self.args["--user-steam-api-dev-key"])
         return self._api_key
 
+    def config_path(self) -> pathlib.Path:
+        """Return the directory where we should store this user's configuration data."""
+        return pathlib.Path.home().joinpath(".steamingpile/")
+
     def cache_path(self) -> pathlib.Path:
         """Return the directory where we should store this user's cached data."""
-        return pathlib.Path.home().joinpath(".steamingpile/")
+        return self.config_path().joinpath(".steamingpile/cache")
 
     def _get_api_key(self, cmdline_key: str = None) -> str:
         """Return the API Dev key supplied by Steam to this user, or None."""
@@ -59,7 +70,7 @@ class SteamingPileConfig(interfaces.IConfiguration):
             cmdline_key = os.getenv(API_KEY_ENV_VAR_NAME)
 
         if cmdline_key is None or cmdline_key == "":
-            chk_file = pathlib.Path(API_KEY_DOTFILE_NAME)
+            chk_file = self.config_path().joinpath(API_KEY_DOTFILE_NAME)
             if chk_file.is_file():
                 with open(API_KEY_DOTFILE_NAME, "r") as f:
                     cmdline_key = f.readline().strip()

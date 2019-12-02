@@ -12,7 +12,7 @@ punctuation = "_- "
 
 
 def get_random_name(
-    include_punctuation: bool = True, length_min: int = 4, length_max: int = 12, selection_set: Optional[str] = None,
+    include_punctuation: bool = True, length_min: int = 4, length_max: int = 12, selection_set: Optional[str] = None
 ) -> str:
     """Return a random name of length between min and max made up of [a-zA-Z0-9 _-]."""
 
@@ -49,18 +49,24 @@ class Config(interfaces.IConfiguration):
     """Mocked out configuration implementation for testing purposes."""
 
     api_key_val = ""
-    command_val = ""
+    cache_path_val = pathlib.Path().cwd()
+    command_args_val: List[str] = []
+    command_val = None
+    config_path_val = pathlib.Path().cwd()
+    force_flag = False
     output_file_val = pathlib.Path().home()
     output_format_val = "text"
     passwd_val = "passwd"
     user_val = "user"
-    cache_path_val = pathlib.Path().cwd()
 
     def api_key(self) -> str:
         return self.api_key_val
 
-    def command(self) -> str:
+    def command(self) -> Optional[str]:
         return self.command_val
+
+    def command_args(self) -> Optional[List[str]]:
+        return self.command_args_val
 
     def output_file(self) -> pathlib.Path:
         return self.output_file_val
@@ -76,6 +82,13 @@ class Config(interfaces.IConfiguration):
 
     def cache_path(self) -> pathlib.Path:
         return self.cache_path_val
+
+    def config_path(self) -> pathlib.Path:
+        return self.config_path_val
+
+    @property
+    def force(self) -> bool:
+        return self.force_flag
 
 
 class NoneClientProvider(interfaces.IClientProvider):

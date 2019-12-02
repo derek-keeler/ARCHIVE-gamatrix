@@ -1,32 +1,35 @@
 import abc
-
 from typing import List
 
+import docopt  # type: ignore
+
 from steamingpile import interfaces
+
+
+COMMAND_MODULE_VERSION = "0.2"
 
 
 class Command(abc.ABC):
     """Base class for all Steaming Pile commands."""
 
-    def __init__(self, cfg: interfaces.IConfiguration):
-        self._config = cfg
+    def __init__(self):
+        pass
 
-    def cmdline_parse_args(self, arguments: str) -> List[str]:
-        """Parse a commandline similar to how the `main(argc, argv)` would have been parsed."""
+    @property
+    def version(self) -> str:
+        """Return the version of a specific command if this is overridden, otherwise the COMMAND_MODULE_VERSION."""
+        return COMMAND_MODULE_VERSION
 
-        # We need to split this command line in an odd way to handle friends who have spaces in their names
-        # split on the argument moniker '--' and try and put it back in front of each occurrance, and then
-        # remove any quotes used in individual arguments that we split out.
-        args_split = [f"--{a.strip()}" for a in arguments.split("--")]
-        args_split = [a.replace('"', "").replace("'", "") for a in args_split]
-        # filter out any '--' elements left lying around...
-        return list(filter(lambda a: a != "--", args_split))
-
-    def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> List[str]:
+    def run_impl(
+        self, options: dict, config: interfaces.IConfiguration, client: interfaces.IClientProvider
+    ) -> List[str]:
+        """The actual run implementation for each command."""
         raise NotImplementedError
 
-    def help_brief(self) -> str:
-        return self.__doc__ or ""
-
-    def help_detailed(self) -> List[str]:
-        return [self.help_brief()]
+    def run(self, cfg: interfaces.IConfiguration, client_provider: interfaces.IClientProvider) -> List[str]:
+        """Run the command, given the command name issued and using the configuration given."""
+        return self.run_impl(
+            options=docopt.docopt(self.__doc__, argv=cfg.command_args(), version=self.version),
+            config=cfg,
+            client=client_provider,
+        )

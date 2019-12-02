@@ -2,6 +2,7 @@
 
 import abc
 import pathlib
+from typing import List, Optional
 
 
 class IConfiguration(abc.ABC):
@@ -14,7 +15,11 @@ class IConfiguration(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def command(self) -> str:
+    def command(self) -> Optional[str]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def command_args(self) -> List[str]:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -30,5 +35,17 @@ class IConfiguration(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def config_path(self) -> pathlib.Path:
+        """Return the directory where we should store this user's configuration data."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def cache_path(self) -> pathlib.Path:
+        """Return the directory where we should store this user's cached data."""
+        raise NotImplementedError
+
+    @property
+    @abc.abstractmethod
+    def force(self) -> bool:
+        """Did the user set the global option to force retrieval from the game service?"""
         raise NotImplementedError

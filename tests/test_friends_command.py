@@ -15,68 +15,51 @@ class TestFriendsCommand:
 
     def test_friend_command_exists(self):
         """Friend command exists and is the right type."""
-        friendcmd, args = spcmd.get_command("friends", self.cfg)
+        friendcmd = spcmd.get_command("friends")
         assert friendcmd
         assert isinstance(friendcmd, spcmd.Friends)
 
-    def test_friend_command_fails(self):
-        """Friend command fails when spelled incorrectly."""
-        friendcmd, args = spcmd.get_command("fren", self.cfg)
-        cli = utils.SettableClientProvider()
-        out = friendcmd.run(args, cli)
-        assert "unknown" in out[0].lower()
-
     def test_friend_fails_bad_cmdline(self):
         """Friend command fails when given unknown commandline argument, and gives appropriate feedback."""
-        friendcmd, args = spcmd.get_command("friends --do-something-not-allowed", self.cfg)
+        friendcmd = spcmd.get_command("friends")
         cli = utils.SettableClientProvider()
         cli.set_friends = [
             sptype.FriendInformation(name="d3r3kk", user_id="12345"),
             sptype.FriendInformation(name="other", user_id="67890"),
         ]
+        self.cfg.command_args_val = ["--jibbity-flibbit"]
         try:
-            friendcmd.run(args, cli)
+            friendcmd.run(self.cfg, cli)
             assert "Argument parsing for friends command did not recognize bad input." == ""
         except docopt.DocoptExit as e:
             assert "friends" in e.usage.lower()
-            assert "--force" in e.usage.lower()
+            assert "usage" in e.usage.lower()
 
     def test_friend_command_runs(self):
         """Friend command runs when given appropriate cmdline options."""
-        friendcmd, args = spcmd.get_command("friends", self.cfg)
+        friendcmd = spcmd.get_command("friends")
         cli = utils.SettableClientProvider()
         cli.set_friends = [
             sptype.FriendInformation(name="d3r3kk", user_id="12345"),
             sptype.FriendInformation(name="other", user_id="67890"),
         ]
-        out = friendcmd.run(args, cli)
+        self.cfg.command_args_val = []
+        out = friendcmd.run(self.cfg, cli)
         assert out
         assert len(out) == 2
         for row in out:
             assert "d3r3kk" in row or "other" in row
 
-    def test_friend_force_shortflag(self):
+    def test_friend_force(self):
         """Friend command issues the '-f' flag correctly and runs when it is issued."""
-        friendcmd, args = spcmd.get_command("friends -f", self.cfg)
+        friendcmd = spcmd.get_command("friends")
         cli = utils.SettableClientProvider()
         cli.set_friends = [
             sptype.FriendInformation(name="d3r3kk", user_id="12345"),
             sptype.FriendInformation(name="other", user_id="67890"),
         ]
-        out = friendcmd.run(args, cli)
-        assert cli.get_friends_forced is True
-        for row in out:
-            assert "d3r3kk" in row or "other" in row
-
-    def test_friend_force_longflag(self):
-        """Friend command issues the '--force' flag correctly and runs when it is issued."""
-        friendcmd, args = spcmd.get_command("friends --force", self.cfg)
-        cli = utils.SettableClientProvider()
-        cli.set_friends = [
-            sptype.FriendInformation(name="d3r3kk", user_id="12345"),
-            sptype.FriendInformation(name="other", user_id="67890"),
-        ]
-        out = friendcmd.run(args, cli)
+        self.cfg.force_flag = True
+        out = friendcmd.run(self.cfg, cli)
         assert cli.get_friends_forced is True
         for row in out:
             assert "d3r3kk" in row or "other" in row

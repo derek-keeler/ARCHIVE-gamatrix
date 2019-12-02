@@ -175,36 +175,15 @@ class SteamingPile(interfaces.IClientProvider):
 
     def run(self):
         if self.config.command() and self.config.command() != "":
-            cmd, args = commands.get_command(self.config.command(), self.config)
+            cmd = commands.get_command(self.config.command())
+
+            if cmd is None:
+                print(f"Unknown command '{cmd}'. Use 'help' to discover valid commands and 'help <cmd>' for usage.")
             try:
-                results = cmd.run(args, self)
+                results = cmd.run(self.config, self)
                 print(*results, sep="\n")
+
             except types.SteamingExit:
                 pass
-        else:
-            self.run_interactive()
+
         self._do_exit()
-
-    def run_interactive(self):
-        """Wait for textual commands to respond to."""
-
-        print("Welcome to steamingpile. Type 'help' for help.")
-        cmd = input("steamingpile cmd: ")
-        keep_accepting_commands = True
-
-        while keep_accepting_commands:
-            exec_cmd, arguments = commands.get_command(cmd, self.config)
-
-            if exec_cmd is not None:
-                try:
-                    # if exec_cmd.requires_client:
-                    #     exec_cmd.set_client(self.client)
-
-                    # results = exec_cmd.run(arguments)
-                    results = exec_cmd.run(arguments, self)
-
-                    print(*results, sep="\n")
-                    cmd = input("steamingpile cmd: ")
-
-                except types.SteamingExit:
-                    keep_accepting_commands = False

@@ -6,11 +6,17 @@ from steamingpile import types
 
 
 class Exit(_abc.Command):
-    """Log out from Steam and exit the steamingpile application."""
+    """ exit
+    Log out from Steam and exit the steamingpile application.
 
-    def __init__(self, cfg: interfaces.IConfiguration):
-        super().__init__(cfg)
+    Usage: exit
+    """
 
-    def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> List[str]:
+    def __init__(self):
+        super().__init__()
+
+    def run_impl(
+        self, options: dict, config: interfaces.IConfiguration, client: interfaces.IClientProvider
+    ) -> List[str]:
         """Exit the app by raising the SteamingExit exception."""
         raise types.SteamingExit

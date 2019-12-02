@@ -7,10 +7,14 @@ from . import _abc
 
 
 class Help(_abc.Command):
-    """Show help for all commands."""
+    """ Show help for all commands.
+        Usage: help
+    """
 
-    def __init__(self, cfg: interfaces.IConfiguration):
-        super().__init__(cfg)
+    def __init__(self):
+        super().__init__()
 
-    def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> List[str]:
+    def run_impl(
+        self, options: dict, config: interfaces.IConfiguration, client: interfaces.IClientProvider
+    ) -> List[str]:
         return appdoc.__doc__.split("\n")

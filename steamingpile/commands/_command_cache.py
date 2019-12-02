@@ -1,5 +1,5 @@
 import functools
-from typing import Dict, Tuple
+from typing import Dict, Optional
 
 from ._abc import Command  # noqa F401
 from ._compare import Compare
@@ -7,31 +7,25 @@ from ._exit import Exit
 from ._friends import Friends
 from ._games import Games
 from ._help import Help
-from ._unknown import Unknown
-from steamingpile import interfaces
 
 
-def get_command(command: str, config: interfaces.IConfiguration) -> Tuple[Command, str]:
+def get_command(command: str) -> Optional[Command]:
     """Ensure the command issued is one we support else return 'Unknown' command to notify user."""
 
-    while command[0] == command[-1] and command.startswith(('"', "'")):
-        command = command[1:-1]
-
-    command_name, _, arguments = command.partition(" ")  # strip("\"' ")
-    cmd_map = _mapping(config)
+    cmd_map = _mapping()
     cmd = None
-    if command_name.lower() in cmd_map:
-        cmd = cmd_map[command_name.lower()]
-    if cmd is None:
-        cmd = cmd_map["unknown"]
-        arguments = command_name
-    return cmd, arguments
+    command_name = command.lower()
+
+    if command_name in cmd_map:
+        cmd = cmd_map[command_name]
+
+    return cmd
 
 
 @functools.lru_cache()
-def _mapping(config: interfaces.IConfiguration) -> Dict:
+def _mapping() -> Dict:
     """Get a command object based on its name. Cached to not continuously get new objects."""
     _command_mapping: Dict[str, Command] = {
-        cls.__name__.lower(): cls(cfg=config) for cls in (Compare, Exit, Friends, Games, Help, Unknown)
+        cls.__name__.lower(): cls() for cls in (Compare, Exit, Friends, Games, Help)
     }
     return _command_mapping
