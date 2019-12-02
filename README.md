@@ -103,7 +103,8 @@ _virtual environment_ using the built-in Python library `venv` to do so. Instruc
     - `python -m pip install --upgrade pip`
     - `python -m pip install -r requirements.txt`
 1. Make your API key available to the application.
-    - `cat 'your_api_key_here' > .user_steam_api_dev_key
+    1. `mkdir -p ~/.steamingpile`
+    1. `cat 'your_api_key_here' > ~/.steamingpile/.user_steam_api_dev_key
     - Note that you can set this as an environment variable called `USER_STEAM_API_DEV_KEY` or supply
       it on the command line.
 
@@ -118,7 +119,17 @@ now run the application.
 1. Run the application with the `--help` flag to see what options/commands are available.
     - `python -m steamingpile --help`
 1. Run the application.
-    - `python -m steamingpile`
+    - Show off all your connected friends:
+    - `python -m steamingpile friends`
+
+### A Note About Cache
+
+The application tries to minimize the amount of times it will reach out to the game client service. To achieve this,
+the results from the basic queries about friends and games are cached between runs. The caches are stored under the
+users home directory, under a folder called `.steamingpile/cache`. The files located there can be removed at any time,
+and can be ignored during runtime by using the `--force` command line option.
+
+Users can look through these cache files using Python, as they are simply _pickled objects_ with a fairly basic schema.
 
 ### Examples
 
@@ -126,9 +137,9 @@ Show friends:
 
 `python -m steamingpile --user=<username> --passwd='<password>' friends`
 
-Compare games with `friend1` and `friend2`:
+Compare games with `friend 1` and `friend_2`:
 
-`python -m steamingpile --user=<username> --passwd='<password>' --command='compare --friend=<friend1> --friend=<friend2>'`
+`python -m steamingpile --user=<username> --passwd='<password>' compare --friend="<friend 1>" --friend=<friend_2>`
 
 ## How to Contribute
 
