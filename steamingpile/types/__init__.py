@@ -10,7 +10,12 @@ class SteamingExit(Exception):
 
 
 @dataclasses.dataclass
-class FriendInformation:
+class SteamingPileInfo:
+    pass
+
+
+@dataclasses.dataclass
+class FriendInformation(SteamingPileInfo):
     name: str
     user_id: str
 
@@ -29,6 +34,6 @@ class FriendInformation:
 
 
 @dataclasses.dataclass
-class GameInformation:
+class GameInformation(SteamingPileInfo):
     name: str
     appid: str
