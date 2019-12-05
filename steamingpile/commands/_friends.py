@@ -27,9 +27,11 @@ class Friends(_abc.Command):
     def __init__(self, cfg: interfaces.IConfiguration):
         super().__init__(cfg)
 
-    def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> List[str]:
+    def run(self, arguments: str, client_provider: interfaces.IClientProvider) -> interfaces.ICommandOutput:
         """Return the list of stored friend information."""
         opts = docopt.docopt(__doc__, argv=arguments.split(), version=FRIENDS_CMD_VERSION)
         friends_list = client_provider.get_friends(force=opts["--force"])
 
-        return [f"{f.name} [{f.user_id}]" for f in friends_list]
+        self.output_line_headings()
+        for f in friends_list:
+            self.output.append_line_data(f.user_id, [f.name, f.user_id])
