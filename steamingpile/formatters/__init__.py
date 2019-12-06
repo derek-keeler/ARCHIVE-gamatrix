@@ -64,8 +64,21 @@ class JsonOutputter(ABCOutput):
 class CsvOutputter(ABCOutput):
     def write(self, stream: IO[str]):
         col: set = set()
+        # get the column names
         for inf in self.information:
-            col = col.union([type(inf).__name__])
+            col = col.union([fld.name for fld in dataclasses.fields(inf)])
+
         csv_writer = csv.writer(stream, dialect="excel")
         csv_writer.writerow(col)
-        csv_writer.writerows(self.information)
+        # csv_writer.writerows(self.information)
+        # Write out each line, leaving a blank for fields that aren't available for each type/instance
+        for inf in self.information:
+            row = []
+            dinf = dataclasses.asdict(inf)
+            for fieldname in col:
+                if fieldname in dinf:
+                    row.append(str(dinf[fieldname]))
+                else:
+                    row.append("")
+            csv_writer.writerow(row)
+

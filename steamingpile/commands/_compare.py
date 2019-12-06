@@ -84,7 +84,7 @@ class Compare(_abc.Command):
                 continue
 
             current_game = game_list[key]
-            game_row: List[Any] = [f'"{current_game.game.name}"']  # add quotes to satisfy CSV nonsense
+            game_row: List[Any] = [f'"{current_game.game.title}"']  # add quotes to satisfy CSV nonsense
 
             # order is important, each entry is either True or False
             for friend in friends:

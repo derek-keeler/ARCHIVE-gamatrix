@@ -35,5 +35,5 @@ class FriendInformation(SteamingPileInfo):
 
 @dataclasses.dataclass
 class GameInformation(SteamingPileInfo):
-    name: str
+    title: str
     appid: str

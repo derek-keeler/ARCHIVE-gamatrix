@@ -34,7 +34,7 @@ def get_random_friends(count: int = 1) -> List[types.FriendInformation]:
 
 
 def get_random_games(count: int = 1) -> List[types.GameInformation]:
-    return [types.GameInformation(name=get_random_name(), appid=get_random_id()) for i in range(count)]
+    return [types.GameInformation(title=get_random_name(), appid=get_random_id()) for i in range(count)]
 
 
 def get_friends(count: int = 1, name_prefix: str = "Friend ") -> List[types.FriendInformation]:
@@ -42,7 +42,7 @@ def get_friends(count: int = 1, name_prefix: str = "Friend ") -> List[types.Frie
 
 
 def get_games(count: int = 1, game_name_prefix: str = "Game ") -> List[types.GameInformation]:
-    return [types.GameInformation(name=f"{game_name_prefix}{i + 1:03d}", appid=f"{i + 1:010X}") for i in range(count)]
+    return [types.GameInformation(title=f"{game_name_prefix}{i + 1:03d}", appid=f"{i + 1:010X}") for i in range(count)]
 
 
 class Config(interfaces.IConfiguration):

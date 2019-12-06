@@ -42,7 +42,7 @@ class TestGamesCommand:
         output = games_cmd.run(self.cfg, cli_provider)
 
         assert cli_provider.get_games_forced is False
-        assert any(friends_games[0].name in s for s in output)
+        assert any(friends_games[0].title in s for s in output)
 
     def test_get_games_for_friend_with_space_in_name(self):
         """Ensure we can get a game for a friend."""
@@ -57,7 +57,7 @@ class TestGamesCommand:
         output = games_cmd.run(self.cfg, cli_provider)
 
         assert cli_provider.get_games_forced is False
-        assert any(friends_games[0].name in s for s in output)
+        assert any(friends_games[0].title in s for s in output)
 
     def test_get_games_for_friend_is_forced(self):
         """Ensure we can get a game for a friend."""
@@ -71,4 +71,4 @@ class TestGamesCommand:
         output = games_cmd.run(self.cfg, cli_provider)
 
         assert cli_provider.get_games_forced is True
-        assert any(friends_games[0].name in s for s in output)
+        assert any(friends_games[0].title in s for s in output)
