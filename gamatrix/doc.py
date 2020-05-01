@@ -1,13 +1,13 @@
-"""steamingpile
+"""gamatrix
 
 Compare the games you own against those of your Steam connected friends. Various different
 commands are available, each caching their results so that every subsequent run can be done
 without reaching out to any game client/game launcher API. 
 
 Usage:
-  steamingpile.py --help
-  steamingpile.py --version
-  steamingpile.py [--user-steam-api-dev-key=KEY]
+  gamatrix.py --help
+  gamatrix.py --version
+  gamatrix.py [--user-steam-api-dev-key=KEY]
                   [--force]
                   [--output-file=PATH] [--output-format=FMT]
                   [--user=USER] [--passwd=PWD]
@@ -36,12 +36,12 @@ Environment Variables:
                             Steam API key. Get one here https://steamcommunity.com/dev/apikey.
 
 Files:
-  ~/.steamingpile/.user_steam_api_dev_key: Contains a string value that is the steam API key for 
+  ~/.gamatrix/.user_steam_api_dev_key: Contains a string value that is the steam API key for 
                               the user running the application. Some of the internal calls made
                               require a Steam API key. Get one here:
                               https://steamcommunity.com/dev/apikey
 
-  ~/.steamingpile/*.cache     Files that store results pertaining to commands issued in a prior
+  ~/.gamatrix/*.cache     Files that store results pertaining to commands issued in a prior
                               run of the program. Use the --force switch to override use of these
                               cache files. It is safe to delete these files before running the
                               program. 

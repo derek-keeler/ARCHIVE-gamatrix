@@ -1,4 +1,4 @@
-"""Configuration values used during the runtime of Steamingpile."""
+"""Configuration values used during the runtime of Gamatrixpile."""
 
 import enum
 import os
@@ -18,7 +18,7 @@ API_KEY_ENV_VAR_NAME = "USER_STEAM_API_DEV_KEY"
 API_KEY_DOTFILE_NAME = ".user_steam_api_dev_key"
 
 
-class SteamingPileConfig(interfaces.IConfiguration):
+class GamatrixConfig(interfaces.IConfiguration):
     def __init__(self, args: dict):
         self.args = args
         self._api_key: Optional[str] = None
@@ -56,11 +56,11 @@ class SteamingPileConfig(interfaces.IConfiguration):
 
     def config_path(self) -> pathlib.Path:
         """Return the directory where we should store this user's configuration data."""
-        return pathlib.Path.home().joinpath(".steamingpile/")
+        return pathlib.Path.home().joinpath(".gamatrix/")
 
     def cache_path(self) -> pathlib.Path:
         """Return the directory where we should store this user's cached data."""
-        return self.config_path().joinpath(".steamingpile/cache")
+        return self.config_path().joinpath(".gamatrix/cache")
 
     def _get_api_key(self, cmdline_key: str = None) -> str:
         """Return the API Dev key supplied by Steam to this user, or None."""

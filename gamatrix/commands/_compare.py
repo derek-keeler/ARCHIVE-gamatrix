@@ -6,8 +6,8 @@ from typing import Any, Dict, List
 
 from . import _abc
 
-from steamingpile import interfaces
-from steamingpile import types
+from gamatrix import interfaces
+from gamatrix import types
 
 COMPARE_CMD_VERSION = "0.1"
 
@@ -33,9 +33,9 @@ class Compare(_abc.Command):
         compare --friend=USER ... [--all-owned-games]
 
     Options:
-        -f --friend=USER        Specify the user name of the game client friend to compare the games with,
-                                multiple separated by commas.
-        -a --all-owned-games    Only output games that are owned by every friend specified.
+        -f --friend=USER        Specify the user name of the game client friend to
+                                compare the games with, multiple separated by commas.
+        -a --all-owned-games    Only output games owned by friends specified.
     """
 
     def __init__(self):
@@ -45,15 +45,23 @@ class Compare(_abc.Command):
         return COMPARE_CMD_VERSION
 
     def run_impl(
-        self, options: dict, config: interfaces.IConfiguration, client: interfaces.IClientProvider
+        self,
+        options: dict,
+        config: interfaces.IConfiguration,
+        client: interfaces.IClientProvider,
     ) -> List[str]:
         """Compare the logged-in user's games to the friends specified."""
 
         # get a list of unique, valid, friends
-        friends = list(filter(lambda f: f.name in options["--friend"], client.get_friends(force=config.force)))
+        friends = list(
+            filter(
+                lambda f: f.name in options["--friend"],
+                client.get_friends(force=config.force),
+            )
+        )
         game_list: Dict[str, FriendGameComparison] = {}
 
-        # build up a list of games, and add friends who own each game as attributes of each game
+        # build up a list of games, and add friends who own each.
         for friend in friends:
 
             friend_games = client.get_games(user_id=friend.user_id, force=config.force)
@@ -62,7 +70,9 @@ class Compare(_abc.Command):
                 if game.appid in game_list:
                     game_list[game.appid].owned_by.append(friend)
                 else:
-                    game_list[game.appid] = FriendGameComparison(owned_by=[friend], game=game)
+                    game_list[game.appid] = FriendGameComparison(
+                        owned_by=[friend], game=game
+                    )
 
         # create output lists, by number of friends who own each game
         # output the list of games owned by everyone first.
@@ -84,7 +94,9 @@ class Compare(_abc.Command):
                 continue
 
             current_game = game_list[key]
-            game_row: List[Any] = [f'"{current_game.game.name}"']  # add quotes to satisfy CSV nonsense
+            game_row: List[Any] = [
+                f'"{current_game.game.name}"'
+            ]  # add quotes to satisfy CSV nonsense
 
             # order is important, each entry is either True or False
             for friend in friends:
@@ -93,11 +105,18 @@ class Compare(_abc.Command):
             # append this to the right number-owned games list
             games_by_num_owners[len(game_list[key].owned_by) - 1].append(game_row)
 
-        gol: List[List[str]] = [[""], [f"compare: Generated on {datetime.datetime.now()}"]]
+        gol: List[List[str]] = [
+            [""],
+            [f"compare: Generated on {datetime.datetime.now()}"],
+        ]
         # output a summary
         for index in reversed(range(len(friends))):
             if len(games_by_num_owners[index]) > 0:
-                gol.append([f"OWNED BY {index+1} FRIENDS (count={len(games_by_num_owners[index])})"])
+                msg = (
+                    f"OWNED BY {index+1} FRIENDS "
+                    f"(count={len(games_by_num_owners[index])})"
+                )
+                gol.append([msg])
 
         gol.append([""])
         # start building the output.

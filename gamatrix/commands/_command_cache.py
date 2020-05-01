@@ -10,7 +10,7 @@ from ._help import Help
 
 
 def get_command(command: str) -> Optional[Command]:
-    """Ensure the command issued is one we support else return 'Unknown' command to notify user."""
+    """Ensure the command issued is one we support else return 'Unknown' command."""
 
     cmd_map = _mapping()
     cmd = None
@@ -24,7 +24,7 @@ def get_command(command: str) -> Optional[Command]:
 
 @functools.lru_cache()
 def _mapping() -> Dict:
-    """Get a command object based on its name. Cached to not continuously get new objects."""
+    """Get a command object based on its name."""
     _command_mapping: Dict[str, Command] = {
         cls.__name__.lower(): cls() for cls in (Compare, Exit, Friends, Games, Help)
     }

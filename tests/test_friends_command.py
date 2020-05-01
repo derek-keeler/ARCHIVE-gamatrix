@@ -2,8 +2,8 @@
 
 import docopt  # type: ignore
 
-import steamingpile.commands as spcmd
-import steamingpile.types as sptype
+import gamatrix.commands as spcmd
+import gamatrix.types as sptype
 
 from . import utils
 
@@ -20,7 +20,7 @@ class TestFriendsCommand:
         assert isinstance(friendcmd, spcmd.Friends)
 
     def test_friend_fails_bad_cmdline(self):
-        """Friend command fails when given unknown commandline argument, and gives appropriate feedback."""
+        """Friend command fails when given unknown commandline argument."""
         friendcmd = spcmd.get_command("friends")
         cli = utils.SettableClientProvider()
         cli.set_friends = [
@@ -30,7 +30,10 @@ class TestFriendsCommand:
         self.cfg.command_args_val = ["--jibbity-flibbit"]
         try:
             friendcmd.run(self.cfg, cli)
-            assert "Argument parsing for friends command did not recognize bad input." == ""
+            assert (
+                "Argument parsing for friends command did not recognize bad input."
+                == ""
+            )
         except docopt.DocoptExit as e:
             assert "friends" in e.usage.lower()
             assert "usage" in e.usage.lower()

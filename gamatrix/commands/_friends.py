@@ -2,8 +2,9 @@
 
 from typing import List
 
+from gamatrix import interfaces
+
 from . import _abc
-from steamingpile import interfaces
 
 FRIENDS_CMD_VERSION = "0.3"
 
@@ -22,7 +23,10 @@ class Friends(_abc.Command):
         return FRIENDS_CMD_VERSION
 
     def run_impl(
-        self, options: dict, config: interfaces.IConfiguration, client: interfaces.IClientProvider
+        self,
+        options: dict,
+        config: interfaces.IConfiguration,
+        client: interfaces.IClientProvider,
     ) -> List[str]:
         """Return the list of stored friend information."""
         friends_list = client.get_friends(force=config.force)

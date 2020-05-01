@@ -2,9 +2,7 @@ import pathlib
 import random
 from typing import List, Optional
 
-from steamingpile import interfaces
-from steamingpile import types
-
+from gamatrix import interfaces, types
 
 alpha = "abcdefghijklmnopqrstuvwxyz"
 numeric = "1234567890"
@@ -12,7 +10,10 @@ punctuation = "_- "
 
 
 def get_random_name(
-    include_punctuation: bool = True, length_min: int = 4, length_max: int = 12, selection_set: Optional[str] = None
+    include_punctuation: bool = True,
+    length_min: int = 4,
+    length_max: int = 12,
+    selection_set: Optional[str] = None,
 ) -> str:
     """Return a random name of length between min and max made up of [a-zA-Z0-9 _-]."""
 
@@ -26,23 +27,46 @@ def get_random_name(
 
 
 def get_random_id():
-    return get_random_name(include_punctuation=False, length_min=10, length_max=10, selection_set=numeric + "ABCDEF")
+    return get_random_name(
+        include_punctuation=False,
+        length_min=10,
+        length_max=10,
+        selection_set=numeric + "ABCDEF",
+    )
 
 
 def get_random_friends(count: int = 1) -> List[types.FriendInformation]:
-    return [types.FriendInformation(name=get_random_name(), user_id=get_random_id()) for i in range(count)]
+    return [
+        types.FriendInformation(name=get_random_name(), user_id=get_random_id())
+        for i in range(count)
+    ]
 
 
 def get_random_games(count: int = 1) -> List[types.GameInformation]:
-    return [types.GameInformation(name=get_random_name(), appid=get_random_id()) for i in range(count)]
+    return [
+        types.GameInformation(name=get_random_name(), appid=get_random_id())
+        for i in range(count)
+    ]
 
 
-def get_friends(count: int = 1, name_prefix: str = "Friend ") -> List[types.FriendInformation]:
-    return [types.FriendInformation(name=f"{name_prefix}{i + 1}", user_id=f"{i:10X}") for i in range(count)]
+def get_friends(
+    count: int = 1, name_prefix: str = "Friend "
+) -> List[types.FriendInformation]:
+    return [
+        types.FriendInformation(name=f"{name_prefix}{i + 1}", user_id=f"{i:10X}")
+        for i in range(count)
+    ]
 
 
-def get_games(count: int = 1, game_name_prefix: str = "Game ") -> List[types.GameInformation]:
-    return [types.GameInformation(name=f"{game_name_prefix}{i + 1:03d}", appid=f"{i + 1:010X}") for i in range(count)]
+def get_games(
+    count: int = 1, game_name_prefix: str = "Game "
+) -> List[types.GameInformation]:
+    return [
+        types.GameInformation(
+            name=f"{game_name_prefix}{i + 1:03d}", appid=f"{i + 1:010X}"
+        )
+        for i in range(count)
+    ]
 
 
 class Config(interfaces.IConfiguration):
@@ -65,7 +89,7 @@ class Config(interfaces.IConfiguration):
     def command(self) -> Optional[str]:
         return self.command_val
 
-    def command_args(self) -> Optional[List[str]]:
+    def command_args(self) -> List[str]:
         return self.command_args_val
 
     def output_file(self) -> pathlib.Path:
@@ -103,7 +127,9 @@ class NoneClientProvider(interfaces.IClientProvider):
     def get_cached_games(self, user_id: str) -> Optional[List[types.GameInformation]]:
         return []
 
-    def get_games(self, user_id: str, force: bool = False) -> List[types.GameInformation]:
+    def get_games(
+        self, user_id: str, force: bool = False
+    ) -> List[types.GameInformation]:
         return []
 
     def get_user_id(self, friend_name: str = "", force: bool = False) -> str:
@@ -131,7 +157,9 @@ class SettableClientProvider(interfaces.IClientProvider):
     def get_cached_games(self, user_id: str) -> Optional[List[types.GameInformation]]:
         return self.set_games
 
-    def get_games(self, user_id: str, force: bool = False) -> List[types.GameInformation]:
+    def get_games(
+        self, user_id: str, force: bool = False
+    ) -> List[types.GameInformation]:
         self.get_games_forced = force
         return self.set_games
 

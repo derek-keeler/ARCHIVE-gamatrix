@@ -1,4 +1,4 @@
-"""Application entry point via the `run` method of the SteamingPile class."""
+"""Application entry point via the `run` method of the Gamatrix class."""
 
 import pickle
 from typing import Dict, List, Optional
@@ -12,7 +12,7 @@ from . import commands
 from . import types
 
 
-class SteamingPile(interfaces.IClientProvider):
+class Gamatrix(interfaces.IClientProvider):
 
     FriendsCacheFileName = "friends.cache"
     GamesCacheFileName = "games.cache"
@@ -39,10 +39,14 @@ class SteamingPile(interfaces.IClientProvider):
         except FileNotFoundError:
             print("No cache file found for game data, will retrieve from game client.")
 
-    def _load_friends_cache(self, friends_data: bytes) -> Optional[List[types.FriendInformation]]:
+    def _load_friends_cache(
+        self, friends_data: bytes
+    ) -> Optional[List[types.FriendInformation]]:
         return pickle.loads(friends_data)
 
-    def _load_games_cache(self, games_data: bytes) -> Optional[Dict[str, List[types.GameInformation]]]:
+    def _load_games_cache(
+        self, games_data: bytes
+    ) -> Optional[Dict[str, List[types.GameInformation]]]:
         return pickle.loads(games_data)
 
     def _store_friends_cache(self) -> Optional[bytes]:
@@ -54,7 +58,9 @@ class SteamingPile(interfaces.IClientProvider):
     def client(self) -> steam.client.SteamClient:
         """The logged in Steam client to use in querying for information."""
         if self._steam_client is None:
-            self._steam_client = self.login_with_2fa(user=self.config.user(), passwd=self.config.passwd())
+            self._steam_client = self.login_with_2fa(
+                user=self.config.user(), passwd=self.config.passwd()
+            )
 
         return self._steam_client
 
@@ -63,7 +69,7 @@ class SteamingPile(interfaces.IClientProvider):
         return self._friends_list
 
     def get_friends(self, force: bool = False) -> List[types.FriendInformation]:
-        """Collect all pertinent friend information and store it in a list, unless we've done it before."""
+        """Collect all pertinent friend information and store it in a list."""
         friends_list = None
         if force is False:
             friends_list = self.get_cached_friends()
@@ -73,18 +79,27 @@ class SteamingPile(interfaces.IClientProvider):
 
             # Add all my friends
             friends_list = [
-                types.FriendInformation(name=friend.name, user_id=f"{friend.steam_id.as_64}") for friend in all_friends
+                types.FriendInformation(
+                    name=friend.name, user_id=f"{friend.steam_id.as_64}"
+                )
+                for friend in all_friends
             ]
 
             # Inject myself at the top of the list... (I am queried for info too!)
             friends_list.insert(
-                0, types.FriendInformation(name=self.client().username, user_id=f"{self.client().steam_id.as_64}")
+                0,
+                types.FriendInformation(
+                    name=self.client().username,
+                    user_id=f"{self.client().steam_id.as_64}",
+                ),
             )
             self._friends_list = friends_list
 
         return friends_list
 
-    def get_friend_by_name(self, name: str, force: bool = False) -> Optional[types.FriendInformation]:
+    def get_friend_by_name(
+        self, name: str, force: bool = False
+    ) -> Optional[types.FriendInformation]:
         friends = self.get_friends(force=force)
         for friend in friends:
             if friend.name == name:
@@ -92,7 +107,7 @@ class SteamingPile(interfaces.IClientProvider):
         return None
 
     def get_user_id(self, friend_name: str = "", force: bool = False) -> str:
-        """Return the user id for the friend-name given, or the user id of the logged-in user."""
+        """Return the user id for the friend-name given, or for the logged-in user."""
         if friend_name is None or len(friend_name) <= 0:
             friend_name = self.config.user()
             if friend_name is None or len(friend_name) <= 0:
@@ -110,7 +125,9 @@ class SteamingPile(interfaces.IClientProvider):
             return self._games_list[user_id]
         return None
 
-    def get_games(self, user_id: str, force: bool = False) -> List[types.GameInformation]:
+    def get_games(
+        self, user_id: str, force: bool = False
+    ) -> List[types.GameInformation]:
         """Use a steam client instance to get a list of owned games for a user."""
 
         games_list = None
@@ -132,13 +149,18 @@ class SteamingPile(interfaces.IClientProvider):
             )
             r = response["response"]
 
-            self._games_list[user_id] = [types.GameInformation(name=g["name"], appid=g["appid"]) for g in r["games"]]
+            self._games_list[user_id] = [
+                types.GameInformation(name=g["name"], appid=g["appid"])
+                for g in r["games"]
+            ]
             games_list = self._games_list[user_id]
 
         return games_list
 
-    def login_with_2fa(self, user: str = None, passwd: str = None) -> steam.client.SteamClient:
-        """Login to steam with user and password. API will request 2FA if client has it enabled."""
+    def login_with_2fa(
+        self, user: str = None, passwd: str = None
+    ) -> steam.client.SteamClient:
+        """Login to steam with user and password."""
         client = steam.client.SteamClient()
 
         print("One-off login recipe")
@@ -159,18 +181,24 @@ class SteamingPile(interfaces.IClientProvider):
         return client
 
     def _do_exit(self):
-        """Clean up any running state/close any open resources/store any cached information."""
+        """Clean up any running state and store any cached information."""
         friends_data = self._store_friends_cache()
         games_data = self._store_games_cache()
 
-        self.config.cache_path().mkdir(parents=True, exist_ok=True)  # TODO: permissions limit to user
+        self.config.cache_path().mkdir(
+            parents=True, exist_ok=True
+        )  # TODO: permissions limit to user
 
         if friends_data is not None:
-            with open(self.config.cache_path().joinpath(self.FriendsCacheFileName), "wb") as out_friends_file:
+            with open(
+                self.config.cache_path().joinpath(self.FriendsCacheFileName), "wb"
+            ) as out_friends_file:
                 out_friends_file.write(friends_data)
 
         if games_data is not None:
-            with open(self.config.cache_path().joinpath(self.GamesCacheFileName), "wb") as out_games_file:
+            with open(
+                self.config.cache_path().joinpath(self.GamesCacheFileName), "wb"
+            ) as out_games_file:
                 out_games_file.write(games_data)
 
     def run(self):
@@ -178,12 +206,15 @@ class SteamingPile(interfaces.IClientProvider):
             cmd = commands.get_command(self.config.command())
 
             if cmd is None:
-                print(f"Unknown command '{cmd}'. Use 'help' to discover valid commands and 'help <cmd>' for usage.")
+                print(
+                    f"""Unknown command '{cmd}'.
+                    Use 'help' to discover valid commands and 'help <cmd>' for usage."""
+                )
             try:
                 results = cmd.run(self.config, self)
                 print(*results, sep="\n")
 
-            except types.SteamingExit:
+            except types.GamatrixExit:
                 pass
 
         self._do_exit()

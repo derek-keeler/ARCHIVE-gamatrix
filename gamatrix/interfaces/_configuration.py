@@ -1,4 +1,4 @@
-"""Interface for configuration values used by the steamingpile program."""
+"""Interface for configuration values used by the gamatrix program."""
 
 import abc
 import pathlib
@@ -47,5 +47,5 @@ class IConfiguration(abc.ABC):
     @property
     @abc.abstractmethod
     def force(self) -> bool:
-        """Did the user set the global option to force retrieval from the game service?"""
+        """Did the user set the global force option?"""
         raise NotImplementedError

@@ -1,7 +1,7 @@
 import abc
 from typing import List, Optional
 
-from steamingpile import types
+from gamatrix import types
 
 
 class IClientProvider(abc.ABC):
@@ -19,10 +19,12 @@ class IClientProvider(abc.ABC):
         """Return a list of game information previously cached for the named user."""
         raise NotImplementedError
 
-    def get_games(self, user_id: str, force: bool = False) -> List[types.GameInformation]:
-        """Return a list of game information owned by the user specified (or the logged in user)."""
+    def get_games(
+        self, user_id: str, force: bool = False
+    ) -> List[types.GameInformation]:
+        """Return a list of game information owned by the user specified."""
         raise NotImplementedError
 
     def get_user_id(self, friend_name: str = "", force: bool = False) -> str:
-        """Returns the game-client user id for the friend, or if no friend specified, the logged in user."""
+        """Returns the game-client user id for the friend, or the logged in user."""
         raise NotImplementedError

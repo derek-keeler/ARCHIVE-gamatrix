@@ -1,0 +1,6 @@
+# dev deps:
+black
+flake8
+mypy
+pytest
+rope

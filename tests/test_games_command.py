@@ -2,7 +2,7 @@
 
 import docopt  # type: ignore
 
-import steamingpile.commands as spcmd
+import gamatrix.commands as spcmd
 
 from . import utils
 
@@ -25,7 +25,7 @@ class TestGamesCommand:
         self.cfg.command_args_val = ["--something-not-there"]
         try:
             games_cmd.run(self.cfg, cli)
-            assert "Argument parsing for games command did not recognize bad input." == ""
+            assert "Games command did not recognize bad input." == ""
         except docopt.DocoptExit as e:
             assert "games" in e.usage.lower()
             assert "--force" in e.usage.lower()

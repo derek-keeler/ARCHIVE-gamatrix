@@ -1,9 +1,9 @@
 import dataclasses
 
-"""Useful types specific to the SteamingPile application."""
+"""Useful types specific to the Gamatrix application."""
 
 
-class SteamingExit(Exception):
+class GamatrixExit(Exception):
     """Tell the interactive loop that it's time to exit the app."""
 
     pass

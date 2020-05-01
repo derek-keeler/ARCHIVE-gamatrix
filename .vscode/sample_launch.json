@@ -5,7 +5,7 @@
             "name": "Interactive",
             "type": "python",
             "request": "launch",
-            "module": "steamingpile",
+            "module": "gamatrix",
             "args": [
                 "--user=your_user_name_here"
             ]
@@ -14,7 +14,7 @@
             "name": "Friends",
             "type": "python",
             "request": "launch",
-            "module": "steamingpile",
+            "module": "gamatrix",
             "args": [
                 "--user=your_user_name_here",
                 "--command=friends"
@@ -24,7 +24,7 @@
             "name": "Friends (force)",
             "type": "python",
             "request": "launch",
-            "module": "steamingpile",
+            "module": "gamatrix",
             "args": [
                 "--user=your_user_name_here",
                 "--command=\"friends --force\""

@@ -1,6 +1,6 @@
-# Steamingpile
+# Gamatrix
 
-![Build Status Badge](https://github.com/d3r3kk/steamingpile/workflows/CI/badge.svg)
+![Build Status Badge](https://github.com/d3r3kk/gamatrix/workflows/CI/badge.svg)
 
 An app to help you and your Steam friends determine what game to play.
 
@@ -19,8 +19,8 @@ An app to help you and your Steam friends determine what game to play.
 > _Step #1: **All platforms**_
 
 ```bash
-git clone https://github.com/d3r3kk/steamingpile
-cd steamingpile
+git clone https://github.com/d3r3kk/gamatrix
+cd gamatrix
 echo "my_personal_steam_web_api_key" > .user_steam_api_dev_key # get key here: https://steamcommunity.com/dev/apikey
 ```
 
@@ -44,7 +44,7 @@ python3 -m venv .venv
 python -m pip install -U pip
 python -m pip install -r requirements.txt
 pytest # This is optional, if you are going to do some development...
-python -m steamingpile
+python -m gamatrix
 ```
 
 ---
@@ -66,20 +66,20 @@ python -m steamingpile
 
 ## Preparation
 
-`steamingpile` is a Python app, so instead of building you set up an environment. Our suggestion is that you create a
+`gamatrix` is a Python app, so instead of building you set up an environment. Our suggestion is that you create a
 _virtual environment_ using the built-in Python library `venv` to do so. Instructions to get a `venv` up and running:
 
 ### Windows Prep
 
 1. Open a Powershell window.
     - *Start->Powershell*
-1. Navigate to a folder where you will run `steamingpile` from.
+1. Navigate to a folder where you will run `gamatrix` from.
     - `cd ~/Documents`
 1. Clone the repo.
-    - `git clone https://github.com/d3r3kk/steamingpile`
+    - `git clone https://github.com/d3r3kk/gamatrix`
 1. Create a virtual environment in the repo and activate it.
-    - `cd steamingpile`
-    - `py -3.8 -m venv .venv --prompt "steamingpile"`
+    - `cd gamatrix`
+    - `py -3.8 -m venv .venv --prompt "gamatrix"`
       - (alternatively, use `py -3.7 ...` for Python version 3.7)
     - `.venv/Scripts/Activate.ps1`
       - If you get errors stating that the `...Execution policy is Restricted...`, see [Troubleshooting](#troubleshooting).
@@ -88,13 +88,13 @@ _virtual environment_ using the built-in Python library `venv` to do so. Instruc
 
 1. Open a terminal.
     - *Meta->Terminal*
-1. Navigate to a folder where you will run `steamingpile` from.
+1. Navigate to a folder where you will run `gamatrix` from.
     - `cd ~/`
 1. Clone the repo.
-    - `git clone https://github.com/d3r3kk/steamingpile`
+    - `git clone https://github.com/d3r3kk/gamatrix`
 1. Create a virtual environment in the repo and activate it.
-    - `cd steamingpile`
-    - `python3 -m venv .venv --prompt "steamingpile"`
+    - `cd gamatrix`
+    - `python3 -m venv .venv --prompt "gamatrix"`
     - `. .venv/bin/activate`
 
 ### Finish up, all platforms
@@ -103,8 +103,8 @@ _virtual environment_ using the built-in Python library `venv` to do so. Instruc
     - `python -m pip install --upgrade pip`
     - `python -m pip install -r requirements.txt`
 1. Make your API key available to the application.
-    1. `mkdir -p ~/.steamingpile`
-    1. `cat 'your_api_key_here' > ~/.steamingpile/.user_steam_api_dev_key
+    1. `mkdir -p ~/.gamatrix`
+    1. `cat 'your_api_key_here' > ~/.gamatrix/.user_steam_api_dev_key
     - Note that you can set this as an environment variable called `USER_STEAM_API_DEV_KEY` or supply
       it on the command line.
 
@@ -114,19 +114,19 @@ Once you are all setup and have the [prerequisites](#prerequisites) and [prepara
 now run the application.
 
 1. Open your shell of choice.
-1. Navigate to the `steamingpile` folder. (Note this is the root-folder you cloned to in Git, **_not_** the `steamingpile/steamingpile` folder within the repo).
+1. Navigate to the `gamatrix` folder. (Note this is the root-folder you cloned to in Git, **_not_** the `gamatrix/gamatrix` folder within the repo).
 1. Activate the Python venv.
 1. Run the application with the `--help` flag to see what options/commands are available.
-    - `python -m steamingpile --help`
+    - `python -m gamatrix --help`
 1. Run the application.
     - Show off all your connected friends:
-    - `python -m steamingpile friends`
+    - `python -m gamatrix friends`
 
 ### A Note About Cache
 
 The application tries to minimize the amount of times it will reach out to the game client service. To achieve this,
 the results from the basic queries about friends and games are cached between runs. The caches are stored under the
-users home directory, under a folder called `.steamingpile/cache`. The files located there can be removed at any time,
+users home directory, under a folder called `.gamatrix/cache`. The files located there can be removed at any time,
 and can be ignored during runtime by using the `--force` command line option.
 
 Users can look through these cache files using Python, as they are simply _pickled objects_ with a fairly basic schema.
@@ -135,11 +135,11 @@ Users can look through these cache files using Python, as they are simply _pickl
 
 Show friends:
 
-`python -m steamingpile --user=<username> --passwd='<password>' friends`
+`python -m gamatrix --user=<username> --passwd='<password>' friends`
 
 Compare games with `friend 1` and `friend_2`:
 
-`python -m steamingpile --user=<username> --passwd='<password>' compare --friend="<friend 1>" --friend=<friend_2>`
+`python -m gamatrix --user=<username> --passwd='<password>' compare --friend="<friend 1>" --friend=<friend_2>`
 
 ## How to Contribute
 
@@ -147,7 +147,7 @@ Quick setup steps...
 
 1. Clone the repo.
 
-    - `git clone https://github.com/d3r3kk/steamingpile`
+    - `git clone https://github.com/d3r3kk/gamatrix`
 
 1. Create your local Python virtual environment and install requirements.txt.
 
@@ -220,7 +220,7 @@ Error message occurs during activation of the Python environment `.venv\Scripts\
 Error message is:
 
 ```pwsh
-.\.venv\Scripts\Activate.ps1 : File C:\path\to\steamingpile\.venv\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies at https://go.microsoft.com/fwlink/?LinkID=135170.
+.\.venv\Scripts\Activate.ps1 : File C:\path\to\gamatrix\.venv\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system. For more information, see about_Execution_Policies at https://go.microsoft.com/fwlink/?LinkID=135170.
 At line:1 char:1
 + .\.venv\Scripts\Activate.ps1
 + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

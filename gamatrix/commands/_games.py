@@ -2,7 +2,7 @@ from typing import List
 
 from . import _abc
 
-from steamingpile import interfaces
+from gamatrix import interfaces
 
 GAMES_CMD_VERSION = "0.1"
 
@@ -29,12 +29,19 @@ class Games(_abc.Command):
         return GAMES_CMD_VERSION
 
     def run_impl(
-        self, options: dict, config: interfaces.IConfiguration, client: interfaces.IClientProvider
+        self,
+        options: dict,
+        config: interfaces.IConfiguration,
+        client: interfaces.IClientProvider,
     ) -> List[str]:
         """Return the list of stored friend information."""
 
-        user_id_to_get_games_for = client.get_user_id(friend_name=options["--friend"], force=options["--force"])
+        user_id_to_get_games_for = client.get_user_id(
+            friend_name=options["--friend"], force=options["--force"]
+        )
 
-        game_info = client.get_games(user_id=user_id_to_get_games_for, force=options["--force"])
+        game_info = client.get_games(
+            user_id=user_id_to_get_games_for, force=options["--force"]
+        )
 
         return sorted([f"{g.name} [appid:{g.appid}]" for g in game_info], key=str.lower)

@@ -1,7 +1,7 @@
 from typing import List
 
-import steamingpile.doc as appdoc
-from steamingpile import interfaces
+import gamatrix.doc as appdoc
+from gamatrix import interfaces
 
 from . import _abc
 
@@ -15,6 +15,9 @@ class Help(_abc.Command):
         super().__init__()
 
     def run_impl(
-        self, options: dict, config: interfaces.IConfiguration, client: interfaces.IClientProvider
+        self,
+        options: dict,
+        config: interfaces.IConfiguration,
+        client: interfaces.IClientProvider,
     ) -> List[str]:
         return appdoc.__doc__.split("\n")
