@@ -72,7 +72,7 @@ class SteamingPileConfig(interfaces.IConfiguration):
         if cmdline_key is None or cmdline_key == "":
             chk_file = self.config_path().joinpath(API_KEY_DOTFILE_NAME)
             if chk_file.is_file():
-                with open(API_KEY_DOTFILE_NAME, "r") as f:
+                with open(chk_file, "r") as f:
                     cmdline_key = f.readline().strip()
 
         return cmdline_key or ""
