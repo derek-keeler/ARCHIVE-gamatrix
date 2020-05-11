@@ -145,6 +145,7 @@ class Gamatrix(interfaces.IClientProvider):
                 steamid=user_id,
                 include_appinfo=True,
                 include_played_free_games=True,
+                include_free_sub=False,
                 appids_filter=None,
             )
             r = response["response"]
